@@ -110,7 +110,11 @@ function Spec:add(plugin, results)
     plugin.dev
     and (not Config.options.dev.fallback or vim.fn.isdirectory(Config.options.dev.path .. "/" .. plugin.name) == 1)
   then
-    dir = Config.options.dev.path .. "/" .. plugin.name
+    if type(Config.options.dev.path) == "string" then
+      dir = Config.options.dev.path .. "/" .. plugin.name
+    else
+      dir = Util.norm(Config.options.dev.path(plugin))
+    end
   elseif plugin.dev == false then
     -- explicitely select the default path
     dir = Config.options.root .. "/" .. plugin.name
